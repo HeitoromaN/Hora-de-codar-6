@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda</title>
+    <link rel="stylesheet" href="agenda.css">
+    <script>
+        let records = [];
+
+        function addRecord() {
+            if (records.length >= 10) {
+                alert("Máximo de 10 registros alcançado.");
+                return;
+            }
+            let nome = document.getElementById('nome').value;
+            let endereco = document.getElementById('endereco').value;
+            let telefone = document.getElementById('telefone').value;
+            records.push({ nome, endereco, telefone });
+            alert("Registro adicionado com sucesso.");
+
+            document.getElementById('nome').value = '';
+            document.getElementById('endereco').value = '';
+            document.getElementById('telefone').value = '';
+        }
+
+        function searchRecord() {
+            let nome = document.getElementById('searchName').value;
+            let record = records.find(record => record.nome === nome);
+            if (record) {
+                alert(`Nome: ${record.nome}, Endereço: ${record.endereco}, Telefone: ${record.telefone}`);
+            } else {
+                alert("Registro não encontrado.");
+            }
+        }
+
+        function sortRecords() {
+            records.sort((a, b) => a.nome.localeCompare(b.nome));
+            alert("Registros ordenados por nome.");
+        }
+
+        function displayRecords() {
+            let output = records.map(record => `Nome: ${record.nome}, Endereço: ${record.endereco}, Telefone: ${record.telefone}`).join('\n');
+            alert(output);
+        }
+
+        function exitProgram() {
+            alert("Programa encerrado.");
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Agenda</h1>
+    <form>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" required><br>
+        <label for="endereco">Endereço:</label>
+        <input type="text" id="endereco" required><br>
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" required><br>
+        <button type="button" onclick="addRecord()">Adicionar Registro</button>
+    </form>
+    <br>
+    <form>
+        <label for="Pesquisar por nome">Pesquisar por Nome:</label>
+        <input type="text" id="searchName" required><br>
+        <button type="button" onclick="searchRecord()">Pesquisar Registro</button>
+    </form>
+    <br>
+    <button type="button" onclick="sortRecords()">Ordenar Registros</button>
+    <button type="button" onclick="displayRecords()">Exibir Registros</button>
+    <button type="button" onclick="exitProgram()">Sair</button>
+</body>
+
+</html>

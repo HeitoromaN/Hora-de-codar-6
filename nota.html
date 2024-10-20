@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Notas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .hidden {
+            display: none;
+        }
+        #menu {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #menu button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #menu button:hover {
+            background-color: #0056b3;
+        }
+        #form {
+            margin-top: 20px;
+        }
+        #form h2 {
+            margin-bottom: 20px;
+        }
+        #form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        #form input[type="text"],
+        #form input[type="number"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastro de Notas</h1>
+        <div id="menu">
+            <button onclick="showForm()">Cadastrar Alunos</button>
+            <button onclick="searchStudent()">Pesquisar Aluno</button>
+            <button onclick="showAll()">Mostrar Todos</button>
+            <button onclick="exitProgram()">Sair</button>
+        </div>
+        <div id="form" class="hidden">
+            <h2>Cadastro de Alunos</h2>
+            <form id="studentForm">
+                <label for="name">Nome:</label>
+                <input type="text" id="name" required><br>
+                <label for="grade1">Nota 1:</label>
+                <input type="number" id="grade1" required><br>
+                <label for="grade2">Nota 2:</label>
+                <input type="number" id="grade2" required><br>
+                <label for="grade3">Nota 3:</label>
+                <input type="number" id="grade3" required><br>
+                <label for="grade4">Nota 4:</label>
+                <input type="number" id="grade4" required><br>
+                <button type="button" onclick="addStudent()">Adicionar</button>
+            </form>
+        </div>
+        <div id="search" class="hidden">
+            <h2>Pesquisar Aluno</h2>
+            <input type="text" id="searchName" placeholder="Nome do aluno">
+            <button onclick="searchByName()">Pesquisar</button>
+            <div id="searchResult"></div>
+        </div>
+        <div id="allStudents" class="hidden">
+            <h2>Todos os Alunos</h2>
+            <div id="studentsList"></div>
+        </div>
+    </div>
+
+    <script>
+        let students = [];
+
+        function showForm() {
+            document.getElementById('form').classList.remove('hidden');
+            document.getElementById('search').classList.add('hidden');
+            document.getElementById('allStudents').classList.add('hidden');
+        }
+
+        function addStudent() {
+            const name = document.getElementById('name').value;
+            const grade1 = parseFloat(document.getElementById('grade1').value);
+            const grade2 = parseFloat(document.getElementById('grade2').value);
+            const grade3 = parseFloat(document.getElementById('grade3').value);
+            const grade4 = parseFloat(document.getElementById('grade4').value);
+
+            const student = {
+                name,
+                grades: [grade1, grade2, grade3, grade4],
+                average: (grade1 + grade2 + grade3 + grade4) / 4
+            };
+
+            students.push(student);
+            students.sort((a, b) => a.name.localeCompare(b.name));
+
+            document.getElementById('studentForm').reset();
+            alert('Aluno cadastrado com sucesso!');
+        }
+
+        function searchStudent() {
+            document.getElementById('form').classList.add('hidden');
+            document.getElementById('search').classList.remove('hidden');
+            document.getElementById('allStudents').classList.add('hidden');
+        }
+
+        function searchByName() {
+            const name = document.getElementById('searchName').value;
+            const student = students.find(s => s.name.toLowerCase() === name.toLowerCase());
+
+            if (student) {
+                const status = student.average >= 5 ? 'Aprovado' : 'Reprovado';
+                document.getElementById('searchResult').innerHTML = `
+                    <p>Nome: ${student.name}</p>
+                    <p>Média: ${student.average.toFixed(2)}</p>
+                    <p>Status: ${status}</p>
+                `;
+            } else {
+                document.getElementById('searchResult').innerHTML = '<p>Aluno não encontrado.</p>';
+            }
+        }
+
+        function showAll() {
+            document.getElementById('form').classList.add('hidden');
+            document.getElementById('search').classList.add('hidden');
+            document.getElementById('allStudents').classList.remove('hidden');
+
+            const studentsList = students.map(student => {
+                const status = student.average >= 5 ? 'Aprovado' : 'Reprovado';
+                return `
+                    <p>Nome: ${student.name}</p>
+                    <p>Média: ${student.average.toFixed(2)}</p>
+                    <p>Status: ${status}</p>
+                    <hr>
+                `;
+            }).join('');
+
+            document.getElementById('studentsList').innerHTML = studentsList;
+        }
+
+        function exitProgram() {
+            alert('Saindo do programa...');
+            window.close();
+        }
+    </script>
+</body>
+</html>
